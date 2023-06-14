@@ -13,6 +13,7 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
     const [emailCheck, setEmailCheck] = useState(false);
     const [passwordCheck, setPasswordCheck] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
 
     const userEmail_OnChange = (e) => {
         setEmail(e.target.value);
@@ -37,16 +38,36 @@ const SignUp = () => {
     };
 
     const signUpCheck = (e) => {
-        let btn = document.querySelector("[data-testid='signup-button']");
         if ( emailCheck && passwordCheck ) {
-            btn.removeAttribute("disabled");
+            setIsDisabled(false);
         } else {
-            btn.setAttribute("disabled", "disabled");
+            setIsDisabled(true);
         }
     };
 
     const btnUserSignUp_OnClick = (e) => {
-        alert( email + '  ' + password );
+        signUp();
+    };
+
+    const signUp = (e) => {
+        fetch('https://www.pre-onboarding-selection-task.shop/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json;charset=utf-8' },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+            .then(res => goToDoList(res));
+    };
+
+    const goToDoList = (data) => {
+        if ( data.ok === true ) {
+            alert('회원가입이 완료 되었습니다.');
+            window.location.href='/';
+        } else {
+            alert( data.statusText );
+        }
     };
 
     return (
@@ -61,7 +82,7 @@ const SignUp = () => {
                 value={email}
                 onChange={userEmail_OnChange}
             >
-                </input><br/>
+            </input><br/>
 
             <span className="inputSpan">비밀번호</span>
             <input 
@@ -70,6 +91,7 @@ const SignUp = () => {
                 type="password"
                 value={password}
                 onChange={userPassWord_OnChange}
+                required
             >
             </input><br/>
 
@@ -77,7 +99,7 @@ const SignUp = () => {
                 data-testid="signup-button"
                 type="button"
                 onClick={btnUserSignUp_OnClick}
-                disabled
+                disabled={isDisabled}
             >
                 <span>회원가입</span>
             </button><br/>
