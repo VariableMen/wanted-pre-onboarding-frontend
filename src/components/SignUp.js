@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/Common.css";
 
@@ -14,6 +14,12 @@ const SignUp = () => {
     const [emailCheck, setEmailCheck] = useState(false);
     const [passwordCheck, setPasswordCheck] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
+
+    useEffect(() => {
+        if ( localStorage.getItem('token') ) {
+            window.location.href='/todo';
+        }
+    }, []);    
 
     const userEmail_OnChange = (e) => {
         setEmail(e.target.value);
@@ -64,7 +70,7 @@ const SignUp = () => {
     const goToDoList = (data) => {
         if ( data.ok === true ) {
             alert('회원가입이 완료 되었습니다.');
-            window.location.href='/';
+            window.location.href='/signin';
         } else {
             alert( data.statusText );
         }
@@ -96,6 +102,7 @@ const SignUp = () => {
             </input><br/>
 
             <button
+                className="signBtn"
                 data-testid="signup-button"
                 type="button"
                 onClick={btnUserSignUp_OnClick}

@@ -16,12 +16,18 @@ input {
     margin: 0.5%;
   }
 
-  button {
+  .signBtn {
     width: 20%;
     font-size: 1.2em;
     background-color: coral;
     cursor: pointer;
     border: none;
+  }
+
+  .todoListBtn {
+    margin: 1%;
+    width: 4em;
+    height: 3em;
   }
 
   button:disabled {
@@ -34,3 +40,8 @@ input {
     margin-top: 20%;
   }
   
+  .todoListUl {
+    text-align: center;
+    width: 12%;
+    margin-left: 40%;
+  }

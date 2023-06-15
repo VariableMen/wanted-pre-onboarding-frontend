@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/Common.css";
 
@@ -14,6 +14,12 @@ const Login = () => {
     const [emailCheck, setEmailCheck] = useState(false);
     const [passwordCheck, setPasswordCheck] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
+
+    useEffect(() => {
+        if ( localStorage.getItem('token') ) {
+            window.location.href='/todo';
+        }
+    }, []);
 
     const btnUserSignIn_OnClick = (e) => {
         signIn();
@@ -54,7 +60,7 @@ const Login = () => {
         if ( data.access_token ) {
             window.localStorage.setItem('token', data.access_token);
             alert('로그인 성공!');
-            window.location.href='/';
+            window.location.href='/todo';
         } else {
             alert('비밀번호가 잘못되었습니다!');
         }
@@ -100,6 +106,7 @@ const Login = () => {
             </input><br/>
 
             <button
+                className="signBtn"
                 data-testid="signin-button"
                 type="button"
                 onClick={btnUserSignIn_OnClick}
