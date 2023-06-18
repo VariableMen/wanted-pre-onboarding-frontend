@@ -9,26 +9,14 @@ const TodoList = () => {
             console.log('로그인중');
 
             getTodoList();
-
-            console.log(todoList);
+            
         } else {
             window.location.href='/signin';
         }
     }, []);
 
     const [todoValue, setTodoValue] = useState('');
-    const [todoList, setTodoList] = useState([
-        {
-            id: 1,
-            todo: '리액트 기초 공부하기',
-            isCompleted: false
-        },
-        {
-            id: 2,
-            todo: '투두리스트 꾸미기',
-            isCompleted: false
-        }
-    ]);
+    const [todoList, setTodoList] = useState([]);
 
     const todoValue_OnChange = (e) => {
         setTodoValue(e.target.value);
@@ -56,7 +44,7 @@ const TodoList = () => {
 
     const createToDolist = (data) => {
         setTodoValue('');
-        console.log(data);
+        
         getTodoList();
     };
 
@@ -66,7 +54,11 @@ const TodoList = () => {
             headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
         })
             .then(res => res.json())
-            .then(data => console.log(data))       
+            .then(data => addToDoList(data))       
+    };
+
+    const addToDoList = (data) => {
+        setTodoList(data);
     };
 
     return(
@@ -91,9 +83,10 @@ const TodoList = () => {
 
             <ul
                 className="todoListUl"
-                role="list"
             >
-                
+                {todoList.map((value, index) => {
+                    return <TodoListItem todoList={value} key={index}></TodoListItem>
+                })}
             </ul>
         </div>
     );

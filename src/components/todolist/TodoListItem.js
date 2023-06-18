@@ -16,17 +16,20 @@ const TodoListItem = ( {todoList} ) => {
                 <input
                     id={id}
                     type="checkbox"
-                    checked={isCompleted}>
-
+                    checked={isCompleted}
+                    readOnly
+                >
                 </input>
                 <span> {todo} </span>
             </label>
             <button
+                type="button"
                 data-testid="modify-button"
                 onClick={btnModify_OnClick}
             >수정
             </button>
             <button
+                type="button"
                 data-testid="delete-button"
                 onClick={btnDelete_OnClick}
             >삭제
