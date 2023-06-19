@@ -1,39 +1,56 @@
+import React, { useState } from "react";
+import TodoListUpdate from '../todolist/TodoListUpdate';
 
 const TodoListItem = ( {todoList} ) => {
     const { id, todo, isCompleted } = todoList;
+    const [isEditTodoList, setIsEditTodoList] = useState(false);
 
     const btnModify_OnClick = (e) => {
-        console.log('modify_onCLick');
+        setIsEditTodoList(true);
     };
 
     const btnDelete_OnClick = (e) => {
-        console.log('delete_onClick');
+        console.log('https://www.pre-onboarding-selection-task.shop/todos/'+id);
+        fetch('https://www.pre-onboarding-selection-task.shop/todos/'+id, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
+        })
+        
     };
 
     return(
         <li className="todoListItem">
-            <label>
-                <input
-                    id={id}
-                    type="checkbox"
-                    checked={isCompleted}
-                    readOnly
+            {isEditTodoList ? (
+                <TodoListUpdate
+                    todoUpdate={todoList}
+                    setIsEditTodoList={setIsEditTodoList}
                 >
-                </input>
-                <span> {todo} </span>
-            </label>
-            <button
-                type="button"
-                data-testid="modify-button"
-                onClick={btnModify_OnClick}
-            >수정
-            </button>
-            <button
-                type="button"
-                data-testid="delete-button"
-                onClick={btnDelete_OnClick}
-            >삭제
-            </button>
+                </TodoListUpdate>
+            ) : (
+                <label>
+                    <input
+                        id={id}
+                        type="checkbox"
+                        defaultChecked={isCompleted}
+                    >
+                    </input>
+                    <span> {todo} </span>
+                    <button
+                        type="button"
+                        data-testid="modify-button"
+                        onClick={btnModify_OnClick}
+                    ><span>수정</span>
+                    </button>
+                    <button
+                        type="button"
+                        data-testid="delete-button"
+                        onClick={btnDelete_OnClick}
+                    ><span>삭제</span>
+                    </button>
+                </label>
+            )
+            }
+            
         </li>
     );
 

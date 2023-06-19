@@ -44,7 +44,14 @@ input {
   }
   
   .todoListUl {
-    text-align: center;
-    width: 12%;
-    margin-left: 40%;
+    width: 100%;
   }
+
+  .todoListUl li {
+    padding: 5px 0px 5px 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #efefef;
+    font-size: 20px;
+  }
+
+

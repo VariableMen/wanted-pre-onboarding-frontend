@@ -38,7 +38,7 @@ const TodoList = () => {
             })
         })
             .then(res => res.json())
-            .then(data => createToDolist(data))
+            .then(data => (createToDolist(data)))
 
     };
 
@@ -85,7 +85,7 @@ const TodoList = () => {
                 className="todoListUl"
             >
                 {todoList.map((value, index) => {
-                    return <TodoListItem todoList={value} key={index}></TodoListItem>
+                    return <TodoListItem todoList={value} key={index} ></TodoListItem>
                 })}
             </ul>
         </div>
