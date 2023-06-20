@@ -64,7 +64,7 @@ const SignUp = () => {
                 password: password
             })
         })
-            .then(res => goToDoList(res));
+            .then(res => goToDoList(res))
     };
 
     const goToDoList = (data) => {
@@ -72,7 +72,7 @@ const SignUp = () => {
             alert('회원가입이 완료 되었습니다.');
             window.location.href='/signin';
         } else {
-            alert( data.statusText );
+            alert( '회원가입에 실패하였습니다.' );
         }
     };
 

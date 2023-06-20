@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import TodoListUpdate from '../todolist/TodoListUpdate';
+import deleteImg from '../../image/delete.PNG';
+import modifyImg from '../../image/modify.PNG';
 
 const TodoListItem = ( {todoList, setTodoList} ) => {
     const { id, todo, isCompleted } = todoList;
@@ -51,13 +53,13 @@ const TodoListItem = ( {todoList, setTodoList} ) => {
                         type="button"
                         data-testid="modify-button"
                         onClick={btnModify_OnClick}
-                    ><span>수정</span>
+                    ><img className="img" src={modifyImg}></img>
                     </button>
                     <button
                         type="button"
                         data-testid="delete-button"
                         onClick={btnDelete_OnClick}
-                    ><span>삭제</span>
+                    ><img className="img" src={deleteImg}></img>
                     </button>
                 </label>
             )

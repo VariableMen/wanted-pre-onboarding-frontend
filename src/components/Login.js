@@ -56,13 +56,12 @@ const Login = () => {
     };
 
     const goToDoList = (data) => {
-        console.log(data);
         if ( data.access_token ) {
             window.localStorage.setItem('token', data.access_token);
             alert('로그인 성공!');
             window.location.href='/todo';
         } else {
-            alert('비밀번호가 잘못되었습니다!');
+            alert(data.message);
         }
     };
 
