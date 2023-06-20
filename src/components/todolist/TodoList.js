@@ -5,9 +5,7 @@ import TodoListItem from '../todolist/TodoListItem';
 const TodoList = () => {
 
     useEffect(() => {
-        if ( localStorage.getItem('token') !== undefined ) {
-            console.log('로그인중');
-
+        if ( localStorage.getItem('token') != undefined ) {
             getTodoList();
             
         } else {
@@ -61,6 +59,11 @@ const TodoList = () => {
         setTodoList(data);
     };
 
+    const btnSignOut_OnClick = (e) => {
+        localStorage.removeItem('token');
+        window.location.href='/';
+    };
+
     return(
         <div className="Main">
             <h2>나의 TODO_LIST</h2>
@@ -79,6 +82,13 @@ const TodoList = () => {
                 onClick={btnTodoList_OnClick}
             >
                 <span>추가</span>
+            </button>
+            <button 
+                className="signOutBtn"
+                type="button"
+                onClick={btnSignOut_OnClick}
+            >
+                <span>로그아웃</span>
             </button>
 
             <ul

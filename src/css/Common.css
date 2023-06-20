@@ -25,7 +25,7 @@ input {
   }
 
   .todoListBtn {
-    margin: 1%;
+    margin: 0.5%;
     width: 4em;
     height: 3em;
     background-color: deepskyblue;
@@ -55,5 +55,3 @@ input {
     border-bottom: 1px solid #efefef;
     font-size: 20px;
   }
-
-

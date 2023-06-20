@@ -16,7 +16,7 @@ const SignUp = () => {
     const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
-        if ( localStorage.getItem('token') !== undefined ) {
+        if ( localStorage.getItem('token') != undefined ) {
             window.location.href='/todo';
         }
     }, []);    
