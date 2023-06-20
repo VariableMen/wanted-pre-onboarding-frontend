@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const TodoListUpdate = ( {todoUpdate, setIsEditTodoList} ) => {
+const TodoListUpdate = ( {todoUpdate, setIsEditTodoList, setTodoList} ) => {
     const { id, todo, isCompleted } = todoUpdate;
     const [modifyTodo, setModifyTodo] = useState('');
     const [modifyIsCompleted, setModifyIsCompleted] = useState('');
@@ -21,10 +21,20 @@ const TodoListUpdate = ( {todoUpdate, setIsEditTodoList} ) => {
             isCompleted : modifyIsCompleted
             })
         })
-            .then(res => res.json())
-            .then(data => console.log(data))
+            .then(res => ( res.ok ? todoListSetting() : alert('업데이트 실패') ))
         
         setIsEditTodoList(false);
+    };
+
+    const todoListSetting = (e) => {
+        
+        fetch('https://www.pre-onboarding-selection-task.shop/todos', {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
+        })
+            .then(res => res.json())
+            .then(data => setTodoList(data))         
+
     };
 
     const btnCancel_OnClick = (e) => {

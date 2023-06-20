@@ -85,7 +85,7 @@ const TodoList = () => {
                 className="todoListUl"
             >
                 {todoList.map((value, index) => {
-                    return <TodoListItem todoList={value} key={index} ></TodoListItem>
+                    return <TodoListItem todoList={value} key={index} setTodoList={setTodoList} ></TodoListItem>
                 })}
             </ul>
         </div>

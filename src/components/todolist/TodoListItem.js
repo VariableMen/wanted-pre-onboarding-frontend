@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TodoListUpdate from '../todolist/TodoListUpdate';
 
-const TodoListItem = ( {todoList} ) => {
+const TodoListItem = ( {todoList, setTodoList} ) => {
     const { id, todo, isCompleted } = todoList;
     const [isEditTodoList, setIsEditTodoList] = useState(false);
 
@@ -15,7 +15,18 @@ const TodoListItem = ( {todoList} ) => {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
         })
+            .then(res => ( res.ok ? todoListSetting() : alert('삭제 실패') ))
+    };
+
+    const todoListSetting = (e) => {
         
+        fetch('https://www.pre-onboarding-selection-task.shop/todos', {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
+        })
+            .then(res => res.json())
+            .then(data => setTodoList(data))         
+
     };
 
     return(
@@ -24,6 +35,7 @@ const TodoListItem = ( {todoList} ) => {
                 <TodoListUpdate
                     todoUpdate={todoList}
                     setIsEditTodoList={setIsEditTodoList}
+                    setTodoList={setTodoList}
                 >
                 </TodoListUpdate>
             ) : (
