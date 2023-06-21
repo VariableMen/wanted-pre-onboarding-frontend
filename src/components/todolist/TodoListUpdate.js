@@ -1,39 +1,38 @@
 import { useState, useEffect } from "react";
+import { fetchUpdateTodoList } from "../../api/todoListApi";
+import { fetchGetTodoList } from "../../api/todoListApi";
 
 const TodoListUpdate = ( {todoUpdate, setIsEditTodoList, setTodoList} ) => {
     const { id, todo, isCompleted } = todoUpdate;
     const [modifyTodo, setModifyTodo] = useState('');
     const [modifyIsCompleted, setModifyIsCompleted] = useState('');
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         setModifyTodo(todo);
         setModifyIsCompleted(isCompleted);
     }, []);
 
-    const btnSubmit_OnClick = (e) => {
+    const btnSubmit_OnClick = async (e) => {
 
-        fetch('https://www.pre-onboarding-selection-task.shop/todos/'+id, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json;charset=utf-8',
-                       'Authorization': 'Bearer '+localStorage.getItem('token') },
-            body: JSON.stringify({
-            todo : modifyTodo ,
-            isCompleted : modifyIsCompleted
-            })
-        })
-            .then(res => ( res.ok ? todoListSetting() : alert('업데이트 실패') ))
-        
+        const { error, message } = await fetchUpdateTodoList(token, id, modifyTodo, modifyIsCompleted);
+        if (error) {
+            alert(message);
+        } else {
+            todoListSetting();
+        }
+
         setIsEditTodoList(false);
     };
 
-    const todoListSetting = (e) => {
+    const todoListSetting = async (e) => {
         
-        fetch('https://www.pre-onboarding-selection-task.shop/todos', {
-            method: 'GET',
-            headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
-        })
-            .then(res => res.json())
-            .then(data => setTodoList(data))         
+        const res = await fetchGetTodoList(token);
+        if (res.length > 0) {
+            setTodoList(res);
+        } else {
+            alert(res.message);
+        }        
 
     };
 

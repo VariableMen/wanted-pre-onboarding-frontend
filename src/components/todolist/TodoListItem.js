@@ -2,32 +2,38 @@ import React, { useState } from "react";
 import TodoListUpdate from '../todolist/TodoListUpdate';
 import deleteImg from '../../image/delete.PNG';
 import modifyImg from '../../image/modify.PNG';
+import { fetchDeleteTodoList } from "../../api/todoListApi";
+import { fetchGetTodoList } from "../../api/todoListApi";
 
 const TodoListItem = ( {todoList, setTodoList} ) => {
+
     const { id, todo, isCompleted } = todoList;
     const [isEditTodoList, setIsEditTodoList] = useState(false);
+    const token = localStorage.getItem('token');
 
     const btnModify_OnClick = (e) => {
         setIsEditTodoList(true);
     };
 
-    const btnDelete_OnClick = (e) => {
-        console.log('https://www.pre-onboarding-selection-task.shop/todos/'+id);
-        fetch('https://www.pre-onboarding-selection-task.shop/todos/'+id, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
-        })
-            .then(res => ( res.ok ? todoListSetting() : alert('삭제 실패') ))
+    const btnDelete_OnClick = async (e) => {
+        
+        const { error, message } = await fetchDeleteTodoList(token, id);
+        if (error) {
+            alert(message);
+        } else {
+            todoListSetting();
+        }
+        
     };
 
-    const todoListSetting = (e) => {
+    const todoListSetting = async (e) => {
         
-        fetch('https://www.pre-onboarding-selection-task.shop/todos', {
-            method: 'GET',
-            headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
-        })
-            .then(res => res.json())
-            .then(data => setTodoList(data))         
+        const res = await fetchGetTodoList(token);
+        if (res.length > 0) {
+            setTodoList(res);
+        } else {
+            alert(res.message);
+        }
 
     };
 

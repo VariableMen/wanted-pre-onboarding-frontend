@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Main from './components/Main';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
+import Login from './components/auth/Login';
+import SignUp from './components/auth/SignUp';
 import TodoList from './components/todolist/TodoList';
 import NotFound from './components/error/NotFound';
 import "./App.css";

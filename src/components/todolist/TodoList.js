@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../../css/Common.css";
 import TodoListItem from '../todolist/TodoListItem';
+import { fetchCreateTodo } from "../../api/todoListApi";
+import { fetchGetTodoList } from "../../api/todoListApi";
 
 const TodoList = () => {
 
@@ -15,48 +17,37 @@ const TodoList = () => {
 
     const [todoValue, setTodoValue] = useState('');
     const [todoList, setTodoList] = useState([]);
+    const token = localStorage.getItem('token');
 
     const todoValue_OnChange = (e) => {
         setTodoValue(e.target.value);
     };
 
-    const btnTodoList_OnClick = (e) => {
+    const btnTodoList_OnClick = async (e) => {
 
         if ( todoValue === "" ) {
             alert('할 일을 입력해주세요.');
             return;
         }
-
-        fetch('https://www.pre-onboarding-selection-task.shop/todos', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json;charset=utf-8',
-                       'Authorization': 'Bearer '+localStorage.getItem('token') },
-            body: JSON.stringify({
-                todo : todoValue
-            })
-        })
-            .then(res => res.json())
-            .then(data => (createToDolist(data)))
-
-    };
-
-    const createToDolist = (data) => {
-        setTodoValue('');
         
-        getTodoList();
+        const { error, message } = await fetchCreateTodo(token, todoValue);
+        if (error) {
+            alert(message);
+        } else {
+            setTodoValue('');
+            getTodoList();
+        }
     };
 
-    const getTodoList = () => {
-        fetch('https://www.pre-onboarding-selection-task.shop/todos', {
-            method: 'GET',
-            headers: { 'Authorization': 'Bearer '+localStorage.getItem('token') }
-        })
-            .then(res => res.json())
-            .then(data => addToDoList(data))       
-    };
+    const getTodoList = async () => {
 
-    const addToDoList = (data) => {
-        setTodoList(data);
+        const res = await fetchGetTodoList(token);
+        if (res.length > 0) {
+            setTodoList(res);
+        } else {
+            alert(res.message);
+        }
+        
     };
 
     const btnSignOut_OnClick = (e) => {

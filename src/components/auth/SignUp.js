@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../css/Common.css";
+import "../../css/Common.css";
+import { fetchSignup } from "../../api/authApi";
 
 //이메일 정규식
 const emailRegEx = /@/;
 //비밀번호 정규식
 const passwordRegEx = /.{8,}/;
 
-const Login = () => {
+const SignUp = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,22 +22,18 @@ const Login = () => {
         }
     }, []);
 
-    const btnUserSignIn_OnClick = (e) => {
-        signIn();
-    };
-
     const userEmail_OnChange = (e) => {
         setEmail(e.target.value);
-        
+
         if (emailRegEx.test(e.target.value)) {
             setEmailCheck(true);
         } else {
             setEmailCheck(false);
         }
-        loginCheck();
+        signUpCheck();
     };
 
-    const userPassword_OnChange = (e) => {
+    const userPassWord_OnChange = (e) => {
         setPassword(e.target.value);
 
         if (passwordRegEx.test(e.target.value)) {
@@ -44,10 +41,10 @@ const Login = () => {
         } else {
             setPasswordCheck(false);
         }
-        loginCheck();
+        signUpCheck();
     };
 
-    const loginCheck = (e) => {
+    const signUpCheck = (e) => {
         if ( emailCheck && passwordCheck ) {
             setIsDisabled(false);
         } else {
@@ -55,70 +52,57 @@ const Login = () => {
         }
     };
 
-    const goToDoList = (data) => {
-        if ( data.access_token ) {
-            window.localStorage.setItem('token', data.access_token);
-            alert('로그인 성공!');
-            window.location.href='/todo';
+    const btnUserSignUp_OnClick = async (e) => {
+        const { error, message } =  await fetchSignup(email, password);
+        if (error) {
+            alert(message);
         } else {
-            alert(data.message);
+            alert(message);
+            window.location.href='/signin';
         }
-    };
-
-    const signIn = (e) => {
-        fetch('https://www.pre-onboarding-selection-task.shop/auth/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json;charset=utf-8' },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            })
-        })
-            .then(res => res.json())
-            .then(data => goToDoList(data))
-            
     };
 
     return (
         <div className="Main">
-            <span>로그인</span><br/>
+            <span>회원가입</span><br/>
 
             <span className="inputSpan">이메일</span>
             <input
                 placeholder="example@mail.com"
-                type="email"
                 data-testid="email-input"
+                type="email"
                 value={email}
                 onChange={userEmail_OnChange}
             >
             </input><br/>
 
             <span className="inputSpan">비밀번호</span>
-            <input
-                placeholder="비밀번호"
-                type="password"
+            <input 
+                placeholder="8자리 이상 입력해주세요."
                 data-testid="password-input"
+                type="password"
                 value={password}
-                onChange={userPassword_OnChange}
+                onChange={userPassWord_OnChange}
                 required
             >
             </input><br/>
 
             <button
                 className="signBtn"
-                data-testid="signin-button"
+                data-testid="signup-button"
                 type="button"
-                onClick={btnUserSignIn_OnClick}
+                onClick={btnUserSignUp_OnClick}
                 disabled={isDisabled}
             >
-                <span>로그인</span>
+                <span>회원가입</span>
             </button><br/>
 
-            <span>계정이 없으신가요?</span>
-            <Link to="/signup">회원가입</Link><br/>
+            <span>계정이 잇으신가요?</span>
+            <Link to="/signin">로그인</Link><br/>
             <Link to="/">홈으로가기</Link>
         </div>
+
     );
 }
 
-export default Login;
+export default SignUp;

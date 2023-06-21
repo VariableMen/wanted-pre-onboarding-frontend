@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../css/Common.css";
+import "../../css/Common.css";
+import { fetchLogin } from "../../api/authApi";
 
 //이메일 정규식
 const emailRegEx = /@/;
 //비밀번호 정규식
 const passwordRegEx = /.{8,}/;
 
-const SignUp = () => {
+const Login = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,20 +20,30 @@ const SignUp = () => {
         if ( localStorage.getItem('token') != undefined ) {
             window.location.href='/todo';
         }
-    }, []);    
+    }, []);
+
+    const btnUserSignIn_OnClick = async (e) => {
+        const { error, message } = await fetchLogin(email, password);
+        if (error) {
+            alert(message);
+        } else {
+            alert(message);
+            window.location.href='/todo';
+        }
+    };
 
     const userEmail_OnChange = (e) => {
         setEmail(e.target.value);
-
+        
         if (emailRegEx.test(e.target.value)) {
             setEmailCheck(true);
         } else {
             setEmailCheck(false);
         }
-        signUpCheck();
+        loginCheck();
     };
 
-    const userPassWord_OnChange = (e) => {
+    const userPassword_OnChange = (e) => {
         setPassword(e.target.value);
 
         if (passwordRegEx.test(e.target.value)) {
@@ -40,10 +51,10 @@ const SignUp = () => {
         } else {
             setPasswordCheck(false);
         }
-        signUpCheck();
+        loginCheck();
     };
 
-    const signUpCheck = (e) => {
+    const loginCheck = (e) => {
         if ( emailCheck && passwordCheck ) {
             setIsDisabled(false);
         } else {
@@ -51,72 +62,46 @@ const SignUp = () => {
         }
     };
 
-    const btnUserSignUp_OnClick = (e) => {
-        signUp();
-    };
-
-    const signUp = (e) => {
-        fetch('https://www.pre-onboarding-selection-task.shop/auth/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json;charset=utf-8' },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-        })
-            .then(res => goToDoList(res))
-    };
-
-    const goToDoList = (data) => {
-        if ( data.ok === true ) {
-            alert('회원가입이 완료 되었습니다.');
-            window.location.href='/signin';
-        } else {
-            alert( '회원가입에 실패하였습니다.' );
-        }
-    };
-
     return (
         <div className="Main">
-            <span>회원가입</span><br/>
+            <span>로그인</span><br/>
 
             <span className="inputSpan">이메일</span>
             <input
                 placeholder="example@mail.com"
-                data-testid="email-input"
                 type="email"
+                data-testid="email-input"
                 value={email}
                 onChange={userEmail_OnChange}
             >
             </input><br/>
 
             <span className="inputSpan">비밀번호</span>
-            <input 
-                placeholder="8자리 이상 입력해주세요."
-                data-testid="password-input"
+            <input
+                placeholder="비밀번호"
                 type="password"
+                data-testid="password-input"
                 value={password}
-                onChange={userPassWord_OnChange}
+                onChange={userPassword_OnChange}
                 required
             >
             </input><br/>
 
             <button
                 className="signBtn"
-                data-testid="signup-button"
+                data-testid="signin-button"
                 type="button"
-                onClick={btnUserSignUp_OnClick}
+                onClick={btnUserSignIn_OnClick}
                 disabled={isDisabled}
             >
-                <span>회원가입</span>
+                <span>로그인</span>
             </button><br/>
 
-            <span>계정이 잇으신가요?</span>
-            <Link to="/signin">로그인</Link><br/>
+            <span>계정이 없으신가요?</span>
+            <Link to="/signup">회원가입</Link><br/>
             <Link to="/">홈으로가기</Link>
         </div>
-
     );
 }
 
-export default SignUp;
+export default Login;
